@@ -1,3 +1,4 @@
+import ast
 global attack_multiplier_matrix
 
 POKEMON_TYPES = {
@@ -43,11 +44,12 @@ attack_multiplier_matrix = [
 ]
 
 class pokemon:
-    def __init__(self, name, typing, base_stats, poke_level):
+    def __init__(self, name, typing, base_stats, poke_level, poke_EVs):
         self.name = name
         self.typing = typing
         self.base_stats = base_stats
         self.poke_level = poke_level
+        self.poke_EVs = poke_EVs
  
     def printID(self):
         if len(self.typing) == 1:
@@ -69,23 +71,33 @@ def attack_multiplier(attack_type, poke):
         multiplier *= attack_multiplier_matrix[attack_type][poke_type]
     return multiplier
 
-
 def battle(pokemon1, pokemon2):
     return f"This is the first battle ever between {pokemon1.name} and {pokemon2.name}. Who will win?!"
 
+def validate_EVs(poke_EVs):
+    if all(individual_EV <= 252 for individual_EV in poke_EVs) and sum(poke_EVs) <= 510:
+        return 1
+    else:
+        return 0
+
+def create_pokemon():
+    #ast.literal_eval se usa para interpretar el input(tipo string) como estructura de python (int, tuple, float, etc)
+    poke_name = input("Pokemon's name': ")
+    poke_typing = ast.literal_eval(input("Pokemon's type: "))
+    poke_base_stats = ast.literal_eval(input("Pokemon's base stats: "))
+    poke_level = ast.literal_eval(input("Pokemon's level:"))
+    poke_EVs = ast.literal_eval(input("Pokemon EVs: "))
+    if validate_EVs(poke_EVs):
+        poke = pokemon(poke_name, poke_typing, poke_base_stats, poke_level, poke_EVs)
+        return poke
+    else:
+        print("Insert propper EVs: maximun individual EV is 252 and combined EVs maximun 510")
+
 def main():
 
-    pikachu = pokemon('Pikachu',(4,),(35,55,40,50,50,90),100)
-    onyx = pokemon('Onix',(8,),(35,45,160,30,45,70),70)
-    gengar = pokemon('Gengar',(12,13),(60,65,60,130,75,110),60)
-
-    print(pikachu.printID())
-    print(onyx.printID())
-    print(gengar.printID())
-
-    print(battle(pikachu,onyx))
-
-    print(pikachu.printSTATS())
-    print(pikachu.printLVL())
+    user_pokemon = create_pokemon()
+    print(user_pokemon.printID())
+    print(user_pokemon.printSTATS())
+    print(user_pokemon.printLVL())
 
 main()
