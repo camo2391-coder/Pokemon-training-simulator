@@ -1,5 +1,7 @@
 import ast
 global attack_multiplier_matrix
+global POKEMON_TYPES
+global POKEMON_NATURE
 
 POKEMON_TYPES = {
     0: "Normal",
@@ -21,6 +23,35 @@ POKEMON_TYPES = {
     16: "Dragon",
     17: "Fairy",
 }
+
+POKEMON_NATURE = {
+    1:  {"name": "Adamant",     "modifiers": (1, 1.1, 1, 0.9, 1, 1)},
+    2:  {"name": "Modest",      "modifiers": (1, 0.9, 1, 1.1, 1, 1)},
+    3:  {"name": "Jolly",       "modifiers": (1, 0.9, 1, 1, 1, 1.1)},
+    4:  {"name": "Bold",        "modifiers": (1, 0.9, 1.1, 1, 1, 1)},
+    5:  {"name": "Calm",        "modifiers": (1, 0.9, 1, 1, 1.1, 1)},
+    6:  {"name": "Timid",       "modifiers": (1, 0.9, 1, 1, 1, 1.1)},
+    7:  {"name": "Impish",      "modifiers": (1, 1, 1.1, 0.9, 1, 1)},
+    8:  {"name": "Careful",     "modifiers": (1, 1, 1, 0.9, 1.1, 1)},
+    9:  {"name": "Naughty",     "modifiers": (1, 1.1, 1, 1, 0.9, 1)},
+    10: {"name": "Quiet",       "modifiers": (1, 1, 1, 1.1, 1, 0.9)},
+    11: {"name": "Brave",       "modifiers": (1, 1.1, 1, 1, 1, 0.9)},
+    12: {"name": "Relaxed",     "modifiers": (1, 1, 1.1, 1, 1, 0.9)},
+    13: {"name": "Sassy",       "modifiers": (1, 1, 1, 1, 1.1, 0.9)},
+    14: {"name": "Lonely",      "modifiers": (1, 1.1, 0.9, 1, 1, 1)},
+    15: {"name": "Rash",        "modifiers": (1, 1, 1, 1.1, 0.9, 1)},
+    16: {"name": "Lax",         "modifiers": (1, 1, 1.1, 1, 0.9, 1)},
+    17: {"name": "Mild",        "modifiers": (1, 1, 0.9, 1.1, 1, 1)},
+    18: {"name": "Gentle",      "modifiers": (1, 1, 0.9, 1, 1.1, 1)},
+    19: {"name": "Hasty",       "modifiers": (1, 1, 0.9, 1, 1, 1.1)},
+    20: {"name": "Naive",       "modifiers": (1, 1, 1, 1, 0.9, 1.1)},
+    21: {"name": "Bashful",     "modifiers": (1, 1, 1, 1, 1, 1)},
+    22: {"name": "Docile",      "modifiers": (1, 1, 1, 1, 1, 1)},
+    23: {"name": "Hardy",       "modifiers": (1, 1, 1, 1, 1, 1)},
+    24: {"name": "Quirky",      "modifiers": (1, 1, 1, 1, 1, 1)},
+    25: {"name": "Serious",     "modifiers": (1, 1, 1, 1, 1, 1)}
+}
+
 
 attack_multiplier_matrix = [
     [1.0,1.0,1.0,1.0,1.0,1.0,0.5,1.0,0.5,1.0,1.0,1.0,0.0,1.0,1.0,0.5,1.0,1.0],
