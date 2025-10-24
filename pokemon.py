@@ -34,7 +34,8 @@ class pokemon:
             return f"Error in typing definition"
         
     def printSTATS(self):
-        return f"My stats are:\n\tHP: {self.stats[0]}\n\tATK: {self.stats[1]}\n\tDEF: {self.stats[2]}\n\tSPATK: {self.stats[3]}\n\tSPDEF: {self.stats[4]}\n\tSPD: {self.stats[5]}\n\t"
+        return f"My stats are:\n\tHP: {self.stats[0]}\n\tATK: {self.stats[1]}\n\tDEF: {self.stats[2]}\n\t \
+            SPATK: {self.stats[3]}\n\tSPDEF: {self.stats[4]}\n\tSPD: {self.stats[5]}\n\t"
 
 
 
