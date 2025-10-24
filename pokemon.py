@@ -43,10 +43,11 @@ attack_multiplier_matrix = [
 ]
 
 class pokemon:
-    def __init__(self, name, typing, stats):
+    def __init__(self, name, typing, base_stats, poke_level):
         self.name = name
         self.typing = typing
-        self.stats = stats
+        self.base_stats = base_stats
+        self.poke_level = poke_level
  
     def printID(self):
         if len(self.typing) == 1:
@@ -57,8 +58,10 @@ class pokemon:
             return f"Error in typing definition"
         
     def printSTATS(self):
-        return f"My stats are:\n\tHP: {self.stats[0]}\n\tATK: {self.stats[1]}\n\tDEF: {self.stats[2]}\n\tSPATK: {self.stats[3]}\n\tSPDEF: {self.stats[4]}\n\tSPD: {self.stats[5]}\n\t"
-
+        return f"My name is {self.name} and these are my base stats:\n\tHP: {self.base_stats[0]}\n\tATK: {self.base_stats[1]}\n\tDEF: {self.base_stats[2]}\n\tSPATK: {self.base_stats[3]}\n\tSPDEF: {self.base_stats[4]}\n\tSPD: {self.base_stats[5]}\n\t"
+    
+    def printLVL(self):
+        return f"My level is {self.poke_level}"
 
 def attack_multiplier(attack_type, poke):
     multiplier = 1
@@ -72,9 +75,9 @@ def battle(pokemon1, pokemon2):
 
 def main():
 
-    pikachu = pokemon('Pikachu',(4,),(35,55,40,50,50,90))
-    onyx = pokemon('Onix',(8,),(35,45,160,30,45,70))
-    gengar = pokemon('Gengar',(12,13),(60,65,60,130,75,110))
+    pikachu = pokemon('Pikachu',(4,),(35,55,40,50,50,90),100)
+    onyx = pokemon('Onix',(8,),(35,45,160,30,45,70),70)
+    gengar = pokemon('Gengar',(12,13),(60,65,60,130,75,110),60)
 
     print(pikachu.printID())
     print(onyx.printID())
@@ -82,9 +85,7 @@ def main():
 
     print(battle(pikachu,onyx))
 
-    print(gengar.printSTATS())
-
-    print(attack_multiplier(2,onyx))
-
+    print(pikachu.printSTATS())
+    print(pikachu.printLVL())
 
 main()
