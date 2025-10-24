@@ -1,4 +1,5 @@
 import ast
+import numpy as np
 global attack_multiplier_matrix
 global POKEMON_TYPES
 global POKEMON_NATURE
@@ -27,7 +28,7 @@ POKEMON_TYPES = {
 POKEMON_NATURE = {
     1:  {"name": "Adamant",     "modifiers": (1, 1.1, 1, 0.9, 1, 1)},
     2:  {"name": "Modest",      "modifiers": (1, 0.9, 1, 1.1, 1, 1)},
-    3:  {"name": "Jolly",       "modifiers": (1, 0.9, 1, 1, 1, 1.1)},
+    3:  {"name": "Jolly",       "modifiers": (1, 1, 1, 0.9, 1, 1.1)},
     4:  {"name": "Bold",        "modifiers": (1, 0.9, 1.1, 1, 1, 1)},
     5:  {"name": "Calm",        "modifiers": (1, 0.9, 1, 1, 1.1, 1)},
     6:  {"name": "Timid",       "modifiers": (1, 0.9, 1, 1, 1, 1.1)},
@@ -52,7 +53,6 @@ POKEMON_NATURE = {
     25: {"name": "Serious",     "modifiers": (1, 1, 1, 1, 1, 1)}
 }
 
-
 attack_multiplier_matrix = [
     [1.0,1.0,1.0,1.0,1.0,1.0,0.5,1.0,0.5,1.0,1.0,1.0,0.0,1.0,1.0,0.5,1.0,1.0],
     [1.0,0.5,0.5,2.0,1.0,1.0,1.0,1.0,0.5,2.0,1.0,1.0,1.0,1.0,2.0,2.0,0.5,1.0],
@@ -75,12 +75,14 @@ attack_multiplier_matrix = [
 ]
 
 class pokemon:
-    def __init__(self, name, typing, base_stats, poke_level, poke_EVs):
+    def __init__(self, name, typing, base_stats, poke_level, poke_IVs, poke_EVs, nature):
         self.name = name
         self.typing = typing
         self.base_stats = base_stats
         self.poke_level = poke_level
+        self.poke_IVs = poke_IVs
         self.poke_EVs = poke_EVs
+        self.nature = nature
  
     def printID(self):
         if len(self.typing) == 1:
@@ -95,6 +97,24 @@ class pokemon:
     
     def printLVL(self):
         return f"My level is {self.poke_level}"
+    
+    def printNATURE(self):
+        return f"My nature is: {POKEMON_NATURE[self.nature]['name']} and my modifiers are:{POKEMON_NATURE[self.nature]['modifiers']}"
+
+
+    def printFINAL_STATS(self):
+        poke_HP = round(0.01*(2*self.base_stats[0] + self.poke_IVs[0] + 0.25*self.poke_EVs[0])*self.poke_level + self.poke_level + 10)
+        poke_ATK = round(0.01*(2*self.base_stats[1] + self.poke_IVs[1] + 0.25*self.poke_EVs[1])*self.poke_level + 5)
+        poke_DEF = round(0.01*(2*self.base_stats[2] + self.poke_IVs[2] + 0.25*self.poke_EVs[2])*self.poke_level + 5)
+        poke_SPATK = round(0.01*(2*self.base_stats[3] + self.poke_IVs[3] + 0.25*self.poke_EVs[3])*self.poke_level + 5)
+        poke_SPDEF = round(0.01*(2*self.base_stats[4] + self.poke_IVs[4] + 0.25*self.poke_EVs[4])*self.poke_level + 5)
+        poke_SPE = round(0.01*(2*self.base_stats[5] + self.poke_IVs[5] + 0.25*self.poke_EVs[5])*self.poke_level + 5)
+
+        poke_stats_no_nature = np.array([poke_HP,poke_ATK,poke_DEF,poke_SPATK,poke_SPDEF,poke_SPE])
+        nature_modifiers = np.array(POKEMON_NATURE[self.nature]["modifiers"])
+        poke_stats_not_rounded = poke_stats_no_nature*nature_modifiers
+        poke_stats = tuple(round(x) for x in poke_stats_not_rounded)
+        return f"\tHP: {poke_stats[0]}\n\tATK: {poke_stats[1]}\n\tDEF: {poke_stats[2]}\n\tSPATK: {poke_stats[3]}\n\tSPDEF: {poke_stats[4]}\n\tSPD: {poke_stats[5]}"
 
 def attack_multiplier(attack_type, poke):
     multiplier = 1
@@ -117,12 +137,18 @@ def create_pokemon():
     poke_typing = ast.literal_eval(input("Pokemon's type: "))
     poke_base_stats = ast.literal_eval(input("Pokemon's base stats: "))
     poke_level = ast.literal_eval(input("Pokemon's level:"))
+    poke_IVs = ast.literal_eval(input("Pokemon IVs: "))
     poke_EVs = ast.literal_eval(input("Pokemon EVs: "))
+    print("Pokemon nature (Choose a number from the list):")
+    for nature_id, nature in POKEMON_NATURE.items():
+        print(f"{nature_id} - {nature['name']}")
+    poke_nature = ast.literal_eval(input())
     if validate_EVs(poke_EVs):
-        poke = pokemon(poke_name, poke_typing, poke_base_stats, poke_level, poke_EVs)
+        poke = pokemon(poke_name, poke_typing, poke_base_stats, poke_level, poke_IVs, poke_EVs, poke_nature)
         return poke
     else:
         print("Insert propper EVs: maximun individual EV is 252 and combined EVs maximun 510")
+        
 
 def main():
 
@@ -130,5 +156,7 @@ def main():
     print(user_pokemon.printID())
     print(user_pokemon.printSTATS())
     print(user_pokemon.printLVL())
+    print(user_pokemon.printNATURE())
+    print(user_pokemon.printFINAL_STATS())
 
 main()
