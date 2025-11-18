@@ -24,7 +24,7 @@ df_stats = pd.json_normalize(data["stats"])
 df_stats = df_stats.drop(columns=['effort', 'stat.url'])
 
 df_abilities = pd.json_normalize(data["abilities"])
-df_abilities = df_abilities.drop(columns=['ability.url','slot'])
+df_abilities = df_abilities.drop(columns=['ability.url'])
 
 types = [t['type']['name'] for t in data['types']]
 
@@ -36,6 +36,4 @@ print(f"Pokemon stats:\n{df_stats}")
 print(f"Pokemon abilities:\n{df_abilities}")
 print(f"Introduced in generation: {generation}")
 
-
-
-# ACCEDER A STAT PARTICULAR df.iloc[3,0] > OUTPUT = 145 (special-attack)
+# ACCEDER A STAT PARTICULAR df.iloc[3,0] > OUTPUT = 145 (special-attack)1
