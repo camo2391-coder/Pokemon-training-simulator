@@ -16,7 +16,7 @@ def human_readable(seconds: float) -> str:
     return f"{s}s {ms}ms"
 
 BASE_URL_MAIN = "https://pokeapi.co/api/v2/pokemon/"
-poke_range = range(1, 1026)  # First generation Pokémon IDs
+poke_range = range(10001, 10304)  # First generation Pokémon IDs
 df_poke_main = pd.DataFrame()
 df_poke_abilities = pd.DataFrame()
 df_pokemon_types = pd.DataFrame()
