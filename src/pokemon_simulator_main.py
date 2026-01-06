@@ -1,13 +1,15 @@
 import pymysql
 import pandas as pd
+import config.database_config as db_config
+import config.app_config as app_config
 
 def connect_db():
     conn = pymysql.connect(
-        host='localhost',
-        port = 3306,
-        user = 'root',
-        password = 'root',
-        database = 'pokemon_ddbb'
+        host= db_config.DB_HOST,
+        port = db_config.DB_PORT,
+        user = db_config.DB_USER,
+        password = db_config.DB_PASSWORD,
+        database = db_config.DB_NAME
     )
     return conn
 
@@ -15,13 +17,11 @@ def print_pokemon():
     poke_id1 = input("Enter Pokemon ID or name: ")
     conn = connect_db()
     cursor = conn.cursor()
-    query2 = """
-    SELECT POKE_NAME, HP, ATK, DEF, SPATK, SPDEF, SPD, BST FROM pokemon_main WHERE POKE_NAME LIKE %s
-    """
+    query1 = app_config.QUERY1
     # Busca por ID o NOMBRE para cada Pokémon
-    cursor.execute(query2, ('%' + poke_id1 + '%',))
+    cursor.execute(query1, ('%' + poke_id1 + '%',))
     rows = cursor.fetchall()
-    pokemon_data = pd.DataFrame(rows, columns=['POKE_NAME', 'HP', 'ATK', 'DEF', 'SPATK', 'SPDEF', 'SPD', 'BST'])
+    pokemon_data = pd.DataFrame(rows, columns = app_config.POKEMON_BASE_COLUMNS)
     cursor.close()
     conn.close()
     print(pokemon_data)
@@ -31,22 +31,10 @@ def grab_pokemons(poke_id1, poke_id2):
     conn = connect_db()
     cursor = conn.cursor()
     # Busca por ID o NOMBRE para cada Pokémon
-    query1 = """
-    SELECT M.POKE_NAME, M.HP, M.ATK, M.DEF, M.SPATK, M.SPDEF, M.SPD, T.TYPE_1, T.TYPE_2\
-    FROM pokemon_main AS M\
-    LEFT JOIN pokemon_types AS T\
-    ON M.POKE_ID = T.POKE_ID\
-    WHERE (M.POKE_ID = %s OR M.POKE_NAME = %s)\
-    OR (M.POKE_ID = %s OR M.POKE_NAME = %s)\
-    ORDER BY CASE
-        WHEN M.POKE_ID = %s OR M.POKE_NAME = %s THEN 1
-        WHEN M.POKE_ID = %s OR M.POKE_NAME = %s THEN 2
-        ELSE 3
-    END
-    """
-    cursor.execute(query1, (poke_id1, poke_id1, poke_id2, poke_id2, poke_id1, poke_id1, poke_id2, poke_id2))
+    query2 = app_config.QUERY2
+    cursor.execute(query2, (poke_id1, poke_id1, poke_id2, poke_id2, poke_id1, poke_id1, poke_id2, poke_id2))
     rows = cursor.fetchall()
-    pokemon_data = pd.DataFrame(rows, columns=['POKE_NAME', 'HP', 'ATK', 'DEF', 'SPATK', 'SPDEF', 'SPD', 'TYPE_1', 'TYPE_2'])
+    pokemon_data = pd.DataFrame(rows, columns = app_config.POKEMON_BASE_COLUMNS_WITH_TYPES)
     cursor.close()
     conn.close()
     return pokemon_data
@@ -73,7 +61,7 @@ def get_valid_EV(stat_name):
             print("Please enter a valid integer.")
 
 def generate_pokemon_EVs(pokemons):
-    pokemons_evs = pd.DataFrame(index=pokemons.index, columns=['HP_EV', 'ATK_EV', 'DEF_EV', 'SPATK_EV', 'SPDEF_EV', 'SPD_EV'])
+    pokemons_evs = pd.DataFrame(index=pokemons.index, columns = app_config.POKEMON_EV_COLUMNS)
     for pokemon in pokemons.itertuples():
         print(f"Insert the EVs for Pokemon ({pokemon.POKE_NAME}):")
         HP_EV = get_valid_EV("HP")
@@ -90,7 +78,7 @@ def generate_pokemon_EVs(pokemons):
     return pd.concat([pokemons, pokemons_evs], axis=1)
 
 def generate_pokemon_level(pokemons):
-    pokemons_lvl = pd.DataFrame(index=pokemons.index, columns=['POKE_LVL'])
+    pokemons_lvl = pd.DataFrame(index=pokemons.index, columns = app_config.POKEMON_LVL)
     for pokemon in pokemons.itertuples():
         print(f"Insert the level for Pokemon ({pokemon.POKE_NAME}):")
         try:
@@ -106,7 +94,7 @@ def generate_pokemon_level(pokemons):
     return pd.concat([pokemons, pokemons_lvl], axis=1)
 
 def stats_calculation(pokemons):
-    poke_stats = pd.DataFrame(index=pokemons.index, columns=['FINAL_HP', 'FINAL_ATK', 'FINAL_DEF', 'FINAL_SPATK', 'FINAL_SPDEF', 'FINAL_SPD'])
+    poke_stats = pd.DataFrame(index=pokemons.index, columns = app_config.POKEMON_FINAL_STATS_COLUMNS)
     for poke in pokemons.itertuples():
         HP = round(0.01*(2*poke.HP + 31 + 0.25*poke.HP_EV)*poke.POKE_LVL + poke.POKE_LVL + 10)
         ATK = round(0.01*(2*poke.ATK + 31 + 0.25*poke.ATK_EV)*poke.POKE_LVL + 5)
@@ -115,10 +103,10 @@ def stats_calculation(pokemons):
         SPDEF = round(0.01*(2*poke.SPDEF + 31 + 0.25*poke.SPDEF_EV)*poke.POKE_LVL + 5)
         SPD = round(0.01*(2*poke.SPD + 31 + 0.25*poke.SPD_EV)*poke.POKE_LVL + 5)
         poke_stats.loc[poke.Index] = [HP, ATK, DEF, SPATK, SPDEF, SPD]
-    poke_stats = pd.concat([pokemons[['POKE_NAME','POKE_LVL']], poke_stats], axis=1)
+    poke_stats = pd.concat([pokemons[app_config.POKEMON_NAME_LVL], poke_stats], axis=1)
     print(poke_stats)
 
 def main():
-    print_pokemon()
+    display_pokemons()
 
 main()
