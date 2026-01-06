@@ -6,7 +6,20 @@ This project is an interactive Pokémon training simulator built in Python. It a
 
 ## 📂 Project Structure
 
-POKEMON TRAINING/ ├── config/                  # Modular configuration │   ├── app_config.py        # SQL queries and base columns │   ├── database_config.py   # Database credentials and connection parameters ├── src/ │   └── pokemon_simulator_main.py  # Main simulator logic ├── tests/                   # Unit and integration tests (to be added) ├── utils/                   # Helper functions such as API scripts to fetch data from PokeAPI, Pokémon type charts, and Pokémon lists ├── .gitignore               # Ignore unnecessary files └── README.md                # Project documentation
+```
+Project Structure
+
+POKEMON TRAINING/
+├── config/
+│   ├── app_config.py        # SQL queries and base columns
+│   └── database_config.py   # Database credentials and connection parameters
+├── src/
+│   ├── pokemon_simulator_main.py   # Main simulator logic
+│   ├── tests/                       # Unit and integration tests (to be added)
+│   └── utils/                       # Helper functions (PokeAPI scripts, charts, lists)
+├── .gitignore               # Ignore unnecessary files
+└── README.md                # Project documentation
+```
 
 ---
 
