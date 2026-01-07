@@ -11,7 +11,7 @@ Project Structure
 
 POKEMON TRAINING/
 ├── config/
-│   ├── app_config.py        # SQL queries and base columns
+│   ├── app_config.py        # SQL queries and project variables
 │   └── database_config.py   # Database credentials and connection parameters
 ├── src/
 │   ├── pokemon_simulator_main.py   # Main simulator logic
@@ -28,7 +28,7 @@ POKEMON TRAINING/
 - Connects to a MySQL database to retrieve Pokémon data  
 - Search by ID or partial name  
 - Manual assignment of EVs for each stat (HP, ATK, DEF, SPATK, SPDEF, SPD)  
-- Validation of EV limits (maximum 510)  
+- Validation of EV limits (maximum 510 and maximun of 252 individual)  
 - Custom level assignment (1–100)  
 - Final stat calculation using standard formulas  
 - Console output displayed with `pandas.DataFrame`
